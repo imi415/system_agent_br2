@@ -1,0 +1,48 @@
+// Device tree overlay for I2C connected Goodix gt9271 multiple touch controller
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target = <&gpio>;
+		__overlay__ {
+			pcf8574a_pins: pcf8574a_pins {
+				brcm,pins = <4>; // interrupt and reset
+				brcm,function = <0>; // in
+				brcm,pull = <2>; // pull-up
+			};
+		};
+	};
+
+	fragment@1 {
+		target = <&i2c1>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "okay";
+
+			pcf8574a: pcf8574a@3f {
+				compatible = "nxp,pcf8574a";
+				reg = <0x3f>;
+				#gpio-cells = <2>;
+				gpio-controller;
+				pinctrl-names = "default";
+				pinctrl-0 = <&pcf8574a_pins>;
+				interrupt-parent = <&gpio>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+				interrupts = <4>; // high-to-low edge triggered
+				irq-gpios = <&gpio 4>; // Pin7 on GPIO header
+			};
+		};
+	};
+
+	__overrides__ {
+		addr = <&pcf8574a>,"reg:0";
+		interrupt = <&pcf8574a_pins>,"brcm,pins:0",
+			<&pcf8574a>,"interrupts:0",
+			<&pcf8574a>,"irq-gpios:4";
+	};
+};

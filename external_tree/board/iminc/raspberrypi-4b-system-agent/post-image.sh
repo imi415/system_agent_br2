@@ -31,6 +31,16 @@ arm_64bit=1
 __EOF__
 		fi
 		;;
+		--add-pcf8574a-overlay)
+		if ! grep -qE '^dtoverlay=pcf8574a' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+			echo "Adding 'dtoverlay=pcf8574a' to config.txt."
+			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+
+# Add PCF8574A GPIO expander
+dtoverlay=pcf8574a,addr=0x3f,interrupt=0x22
+__EOF__
+		fi
+		;;
 		--gpu_mem_256=*|--gpu_mem_512=*|--gpu_mem_1024=*)
 		# Set GPU memory
 		gpu_mem="${arg:2}"
@@ -49,6 +59,8 @@ trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
 ROOTPATH_TMP="$(mktemp -d)"
 
 rm -rf "${GENIMAGE_TMP}"
+
+mv "${BINARIES_DIR}/pcf8574a.dtb" "${BINARIES_DIR}/rpi-firmware/overlays/pcf8574a.dtbo"
 
 genimage \
 	--rootpath "${ROOTPATH_TMP}"   \
