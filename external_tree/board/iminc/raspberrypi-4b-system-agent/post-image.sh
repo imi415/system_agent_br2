@@ -42,8 +42,10 @@ __EOF__
 done
 
 if [[ -f "${CONFIG_TEMPLATE}" ]]; then
-	echo "Config template file exists, append to config.txt"
-	cat "${CONFIG_TEMPLATE}" >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+	if ! grep -qE '^# CUSTOM_CONFIG' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+		echo "Config template file exists, append to config.txt"
+		cat "${CONFIG_TEMPLATE}" >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+	fi
 fi
 
 # Pass an empty rootpath. genimage makes a full copy of the given rootpath to
