@@ -37,7 +37,7 @@ __EOF__
 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
 
 # Add PCF8574A GPIO expander
-dtoverlay=pcf8574a,addr=0x3f,interrupt=0x22
+dtoverlay=pcf8574a,addr=0x3f,interrupt=22
 __EOF__
 		fi
 		;;
@@ -60,7 +60,7 @@ ROOTPATH_TMP="$(mktemp -d)"
 
 rm -rf "${GENIMAGE_TMP}"
 
-mv "${BINARIES_DIR}/pcf8574a.dtb" "${BINARIES_DIR}/rpi-firmware/overlays/pcf8574a.dtbo"
+cp "${BINARIES_DIR}/pcf8574a.dtb" "${BINARIES_DIR}/rpi-firmware/overlays/pcf8574a.dtbo"
 
 genimage \
 	--rootpath "${ROOTPATH_TMP}"   \
