@@ -1,0 +1,6 @@
+# Enable spidev node
+dtparam=spi=on
+
+# Add PCF8574A GPIO expander
+dtoverlay=pcf8574a,addr=0x3f,interrupt=22
+

@@ -6,6 +6,7 @@ BOARD_DIR="$(dirname $0)"
 BOARD_NAME="$(basename ${BOARD_DIR})"
 GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+CONFIG_TEMPLATE="${BOARD_DIR}/config.tmpl.txt"
 
 for arg in "$@"
 do
@@ -31,16 +32,6 @@ arm_64bit=1
 __EOF__
 		fi
 		;;
-		--add-pcf8574a-overlay)
-		if ! grep -qE '^dtoverlay=pcf8574a' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-			echo "Adding 'dtoverlay=pcf8574a' to config.txt."
-			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-
-# Add PCF8574A GPIO expander
-dtoverlay=pcf8574a,addr=0x3f,interrupt=22
-__EOF__
-		fi
-		;;
 		--gpu_mem_256=*|--gpu_mem_512=*|--gpu_mem_1024=*)
 		# Set GPU memory
 		gpu_mem="${arg:2}"
@@ -49,6 +40,11 @@ __EOF__
 	esac
 
 done
+
+if [[ -f "${CONFIG_TEMPLATE}" ]]; then
+	echo "Config template file exists, append to config.txt"
+	cat "${CONFIG_TEMPLATE}" >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+fi
 
 # Pass an empty rootpath. genimage makes a full copy of the given rootpath to
 # ${GENIMAGE_TMP}/root so passing TARGET_DIR would be a waste of time and disk
