@@ -4,5 +4,11 @@
 dtparam=spi=on
 
 # Add PCF8574A GPIO expander
-dtoverlay=pcf8574a,addr=0x38,interrupt=22
+dtoverlay=i2c-pcf8574a,addr=0x38,interrupt=22
+
+# Add DS3231 driver
+dtoverlay=i2c-rtc,ds3231
+
+# Add BME280 sensor
+dtoverlay=i2c-bme280,addr=0x76
 

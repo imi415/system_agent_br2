@@ -58,7 +58,8 @@ ROOTPATH_TMP="$(mktemp -d)"
 
 rm -rf "${GENIMAGE_TMP}"
 
-cp "${BINARIES_DIR}/pcf8574a.dtb" "${BINARIES_DIR}/rpi-firmware/overlays/pcf8574a.dtbo"
+cp "${BINARIES_DIR}/i2c-pcf8574a.dtb" "${BINARIES_DIR}/rpi-firmware/overlays/i2c-pcf8574a.dtbo"
+cp "${BINARIES_DIR}/i2c-bme280.dtb" "${BINARIES_DIR}/rpi-firmware/overlays/i2c-bme280.dtbo"
 
 genimage \
 	--rootpath "${ROOTPATH_TMP}"   \
