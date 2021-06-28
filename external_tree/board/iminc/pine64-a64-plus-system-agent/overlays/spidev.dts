@@ -1,0 +1,31 @@
+// Enable spidev with GPIO as CE1.
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "allwinner,sun50i-a64";
+
+	fragment@0 {
+		target-path = "/aliases";
+		__overlay__ {
+			spi0 = "/soc/spi@1c68000";
+		};
+	};
+
+	fragment@1 {
+		target = <&spi0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "okay";
+			cs-gpios = <0>, <&pio 7 7 0>; /* PH7 */
+			spidev@1 {
+				compatible = "linux,spidev";
+				status = "okay";
+				reg = <1>;
+				spi-max-frequency = <32000000>;
+			};
+		};
+	};
+};
