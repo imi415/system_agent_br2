@@ -1,0 +1,37 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "allwinner,sun50i-a64";
+
+	fragment@0 {
+		target = <&pio>;
+		__overlay__ {
+			pcf8574a_irq_pins: pcf8574a_irq_pins {
+				pins = "PC12";
+				function = "irq";
+				bias-pull-up;
+			};
+		};
+	};
+
+	fragment@1 {
+		target = <&i2c1>;
+		__overlay__ {
+			pcf8574a: pcf8574a@38 {
+				status = "okay";
+				compatible = "nxp,pcf8574a";
+				reg = <0x38>;
+				#gpio-cells = <2>;
+				gpio-controller;
+				pinctrl-names = "default";
+				pinctrl-0 = <&pcf8574a_irq_pins>;
+				interrupt-parent = <&pio>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+				interrupts = <2 12 2>; // PC12, falling edge triggered.
+				irq-gpios = <&pio 2 12 1>; // GPIO 22, on 40p header.
+			};
+		};
+	};
+};

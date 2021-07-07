@@ -43,6 +43,7 @@ rm -rf "${GENIMAGE_TMP}"
 mkdir -p "${BINARIES_DIR}/overlays"
 
 cp "${BINARIES_DIR}/spidev.dtb" "${BINARIES_DIR}/overlays/spidev.dtbo"
+cp "${BINARIES_DIR}/i2c-pcf8574a.dtb" "${BINARIES_DIR}/overlays/i2c-pcf8574a.dtbo"
 
 genimage \
 	--rootpath "${ROOTPATH_TMP}"     \
